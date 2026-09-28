@@ -72,6 +72,8 @@ class _ViewingSchedulerScreenState extends State<ViewingSchedulerScreen> {
       final Booking booking = await _bookingService.bookViewing(
         slot: _selectedSlot!,
         propertyTitle: widget.property.title,
+        propertyImage: widget.property.primaryImage,
+        agentId: widget.property.agentId,
         buyerName: _nameController.text,
         buyerEmail: _emailController.text,
       );

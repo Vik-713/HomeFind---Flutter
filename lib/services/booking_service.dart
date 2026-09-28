@@ -16,9 +16,13 @@ class BookingService {
 
   /// Book a viewing slot using a Firestore Transaction to guarantee atomicity
   /// and prevent double booking of the same viewing slot.
+  /// Book a viewing slot using a Firestore Transaction to guarantee atomicity
+  /// and prevent double booking of the same viewing slot.
   Future<Booking> bookViewing({
     required ViewingSlot slot,
     required String propertyTitle,
+    String propertyImage = 'assets/images/property1.jpg',
+    String agentId = '',
     required String buyerName,
     required String buyerEmail,
   }) async {
@@ -44,8 +48,10 @@ class BookingService {
         final booking = Booking(
           id: bookingRef.id,
           propertyId: slot.propertyId,
+          agentId: agentId,
           slotId: slot.id,
           propertyTitle: propertyTitle,
+          propertyImage: propertyImage,
           buyerName: buyerName.trim(),
           buyerEmail: buyerEmail.trim(),
           date: slot.date,
@@ -80,6 +86,28 @@ class BookingService {
         .map((snapshot) {
       final list = snapshot.docs.map((doc) => Booking.fromFirestore(doc)).toList();
       list.sort((a, b) => b.createdAt.compareTo(a.createdAt));
+      return list;
+    });
+  }
+
+  /// Get stream of scheduled visits/bookings specifically for an agent's properties
+  Stream<List<Booking>> getAgentBookingsStream(String agentId, {List<String>? agentPropertyIds}) {
+    return _bookingsCollection.snapshots().map((snapshot) {
+      final list = snapshot.docs
+          .map((doc) => Booking.fromFirestore(doc))
+          .where((booking) {
+            // Match agentId directly if set
+            if (booking.agentId.isNotEmpty) {
+              return booking.agentId == agentId;
+            }
+            // Fallback for legacy bookings: match against propertyId list if provided
+            if (agentPropertyIds != null && agentPropertyIds.contains(booking.propertyId)) {
+              return true;
+            }
+            return false;
+          })
+          .toList();
+      list.sort((a, b) => b.date.compareTo(a.date));
       return list;
     });
   }

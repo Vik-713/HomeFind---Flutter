@@ -7,13 +7,15 @@ import '../theme/app_theme.dart';
 class PropertyCard extends StatelessWidget {
   final Property property;
   final VoidCallback onTap;
-  final VoidCallback onBookViewing;
+  final VoidCallback? onBookViewing;
+  final bool showBookButton;
 
   const PropertyCard({
     super.key,
     required this.property,
     required this.onTap,
-    required this.onBookViewing,
+    this.onBookViewing,
+    this.showBookButton = true,
   });
 
   @override
@@ -160,21 +162,21 @@ class PropertyCard extends StatelessWidget {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 14),
-
-                  // Action Button
-                  SizedBox(
-                    width: double.infinity,
-                    height: 42,
-                    child: FilledButton.icon(
-                      onPressed: onBookViewing,
-                      icon: const Icon(Icons.calendar_month, size: 18),
-                      label: const Text('Book Viewing'),
-                      style: FilledButton.styleFrom(
-                        padding: EdgeInsets.zero,
+                  if (showBookButton && onBookViewing != null) ...[
+                    const SizedBox(height: 14),
+                    SizedBox(
+                      width: double.infinity,
+                      height: 42,
+                      child: FilledButton.icon(
+                        onPressed: onBookViewing,
+                        icon: const Icon(Icons.calendar_month, size: 18),
+                        label: const Text('Book Viewing'),
+                        style: FilledButton.styleFrom(
+                          padding: EdgeInsets.zero,
+                        ),
                       ),
                     ),
-                  ),
+                  ],
                 ],
               ),
             ),

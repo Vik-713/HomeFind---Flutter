@@ -6,8 +6,10 @@ import 'package:intl/intl.dart';
 class Booking {
   final String id;
   final String propertyId;
+  final String agentId;
   final String slotId;
   final String propertyTitle;
+  final String propertyImage;
   final String buyerName;
   final String buyerEmail;
   final DateTime date;
@@ -19,8 +21,10 @@ class Booking {
   Booking({
     required this.id,
     required this.propertyId,
+    this.agentId = '',
     required this.slotId,
     required this.propertyTitle,
+    this.propertyImage = 'assets/images/property1.jpg',
     required this.buyerName,
     required this.buyerEmail,
     required this.date,
@@ -34,8 +38,10 @@ class Booking {
     return Booking(
       id: docId,
       propertyId: map['propertyId'] ?? '',
+      agentId: map['agentId'] ?? '',
       slotId: map['slotId'] ?? '',
       propertyTitle: map['propertyTitle'] ?? 'Property Viewing',
+      propertyImage: map['propertyImage'] ?? 'assets/images/property1.jpg',
       buyerName: map['buyerName'] ?? 'Buyer',
       buyerEmail: map['buyerEmail'] ?? '',
       date: (map['date'] as Timestamp?)?.toDate() ?? DateTime.now(),
@@ -54,8 +60,10 @@ class Booking {
   Map<String, dynamic> toMap() {
     return {
       'propertyId': propertyId,
+      'agentId': agentId,
       'slotId': slotId,
       'propertyTitle': propertyTitle,
+      'propertyImage': propertyImage,
       'buyerName': buyerName,
       'buyerEmail': buyerEmail,
       'date': Timestamp.fromDate(date),
