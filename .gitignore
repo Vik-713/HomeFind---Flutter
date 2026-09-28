@@ -1,0 +1,89 @@
+# Miscellaneous
+*.class
+*.log
+*.pyc
+*.swp
+.DS_Store
+.atom/
+.build/
+.buildlog/
+.history
+.svn/
+.swiftpm/
+Thumbs.db
+*.bak
+*.tmp
+
+# IntelliJ / Android Studio
+*.iml
+*.ipr
+*.iws
+.idea/
+.gradle/
+
+# Visual Studio Code
+.vscode/
+
+# Flutter / Dart / Pub
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.pub-cache/
+.pub/
+/build/
+/coverage/
+**/doc/api/
+**/ios/Flutter/.last_build_id
+
+# Symbolication & Obfuscation
+app.*.symbols
+app.*.map.json
+
+# Android
+/android/app/debug
+/android/app/profile
+/android/app/release
+/android/app/src/main/assets/
+android/local.properties
+android/.gradle/
+android/captures/
+android/.externalNativeBuild/
+android/.cxx/
+
+# iOS / macOS
+**/ios/Flutter/App.framework
+**/ios/Flutter/Flutter.framework
+**/ios/Flutter/Flutter.podspec
+**/ios/Flutter/Generated.xcconfig
+**/ios/Flutter/app.flt
+**/ios/DerivedData/
+**/macOS/Flutter/ephemeral/
+**/macOS/DerivedData/
+*.mode1v3
+*.mode2v3
+*.moved-aside
+*.pbxuser
+*.perspectivev3
+Pods/
+Runner.xcworkspace/
+
+# Web
+lib/generated_plugin_registrant.dart
+
+# Widget Preview
+.widget_preview/
+
+# Environment Variables & Firebase Debug Logs
+.env
+.env.*
+firebase-debug.log
+firestore-debug.log
+ui-debug.log
+
+# Firebase Sensitive Credentials & Keys
+**/google-services.json
+**/GoogleService-Info.plist
+service-account*.json
+*.pem
+*.keystore
+*.jks

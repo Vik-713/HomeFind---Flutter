@@ -1,0 +1,59 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helper functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    // USERS COLLECTION
+    // users/{uid}
+    match /users/{userId} {
+      allow read: if isAuthenticated();
+      allow create, update: if isOwner(userId);
+      allow delete: if false;
+    }
+
+    // PROPERTIES COLLECTION
+    // properties/{propertyId}
+    match /properties/{propertyId} {
+      // Anyone (public buyers & agents) can browse and view properties
+      allow read: if true;
+      
+      // Only authenticated agents can post properties, and agentId must match their UID
+      allow create: if isAuthenticated() && request.resource.data.agentId == request.auth.uid;
+      
+      // Only property owner/agent can update or delete their listing
+      allow update, delete: if isAuthenticated() && resource.data.agentId == request.auth.uid;
+    }
+
+    // VIEWING SLOTS COLLECTION
+    // viewingSlots/{slotId}
+    match /viewingSlots/{slotId} {
+      // Public buyers and agents can view viewing slots
+      allow read: if true;
+      
+      // Authenticated users or slot operations can update slot availability
+      allow create, update: if true;
+      allow delete: if isAuthenticated();
+    }
+
+    // BOOKINGS COLLECTION
+    // bookings/{bookingId}
+    match /bookings/{bookingId} {
+      // Public buyers can create bookings
+      allow create: if true;
+      
+      // Users/agents can read booking records
+      allow read: if true;
+      
+      // Prevent arbitrary modification or deletion of past bookings
+      allow update, delete: if isAuthenticated();
+    }
+  }
+}

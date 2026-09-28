@@ -179,14 +179,3 @@ lib/
    ```
 
 ---
-
-## 7. Deliverables Compliance Checklist
-
-| University Requirement | Status | Implementation Details |
-| :--- | :---: | :--- |
-| **DELIVERABLE 1: Figma Design** | ✅ COMPLETED | Detailed design specification document created in `docs/FIGMA_DESIGN.md` covering all 6 screens, 8-pt spatial grid, typography, colors, and user journeys. |
-| **DELIVERABLE 2: UI / Widgets** | ✅ COMPLETED | Built using Form, TextFormField, GridView, Card, Image, Date/Time widgets, Dropdown, AppBar, Loading Indicators, Error Banners, SnackBars, and Responsive Layouts. |
-| **DELIVERABLE 3: Styling / Theming** | ✅ COMPLETED | Centralized Material 3 `AppTheme` with `ColorScheme`, `TextTheme`, `CardThemeData`, `InputDecorationTheme`, and consistent border radii. |
-| **DELIVERABLE 4: Dart Logic & Async** | ✅ COMPLETED | Clean `async/await`, `Future`, and `Stream` operations for Auth, Firestore read/writes, and atomic transaction slot booking. |
-| **DELIVERABLE 5: Firebase Integration** | ✅ COMPLETED | Full integration of Firebase Auth (Email/Password) and Cloud Firestore (4 collections). Property images handled via local assets (`assets/images/`). |
-| **DELIVERABLE 6: Responsive Prototype** | ✅ COMPLETED | Adaptive GridView (1 col mobile, 2 col tablet, 3-4 col desktop/web) tested with no layout overflows. |
