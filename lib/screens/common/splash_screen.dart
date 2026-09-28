@@ -5,7 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import '../../theme/app_theme.dart';
 import '../agent/agent_home_screen.dart';
 import '../auth/login_screen.dart';
-import '../buyer/browse_properties_screen.dart';
+import '../buyer/buyer_main_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -30,20 +30,20 @@ class _SplashScreenState extends State<SplashScreen> {
                   Icon(
                     Icons.home_work_rounded,
                     size: 72,
-                    color: AppTheme.primaryBlue,
+                    color: AppTheme.textPrimary,
                   ),
                   SizedBox(height: 16),
                   Text(
-                    'HOMEFIND',
+                    'HomeFind',
                     style: TextStyle(
                       fontSize: 28,
                       fontWeight: FontWeight.bold,
-                      letterSpacing: 2,
-                      color: AppTheme.primaryNavy,
+                      letterSpacing: 1.5,
+                      color: AppTheme.textPrimary,
                     ),
                   ),
                   SizedBox(height: 24),
-                  CircularProgressIndicator(strokeWidth: 3),
+                  CircularProgressIndicator(strokeWidth: 3, color: AppTheme.textPrimary),
                 ],
               ),
             ),
@@ -75,43 +75,49 @@ class PublicLandingScreen extends StatelessWidget {
           child: SingleChildScrollView(
             padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
             child: Container(
-              constraints: const BoxConstraints(maxWidth: 500),
+              constraints: const BoxConstraints(maxWidth: 480),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   // App Branding Icon & Title
                   Container(
-                    padding: const EdgeInsets.all(24),
+                    width: 80,
+                    height: 80,
                     decoration: BoxDecoration(
-                      color: AppTheme.primaryBlue.withValues(alpha: 0.1),
                       shape: BoxShape.circle,
+                      gradient: const LinearGradient(
+                        colors: [Color(0xFF3D3D3D), Color(0xFF1A1A1A)],
+                      ),
+                      border: Border.all(color: const Color(0xFF4A4A4A), width: 1),
                     ),
                     child: const Icon(
-                      Icons.home_work_rounded,
-                      size: 64,
-                      color: AppTheme.primaryBlue,
+                      Icons.home,
+                      size: 40,
+                      color: Color(0xFFE6E6E6),
                     ),
                   ),
-                  const SizedBox(height: 24),
+                  const SizedBox(height: 20),
                   Text(
-                    'HOMEFIND',
+                    'HomeFind',
                     style: theme.textTheme.displayLarge?.copyWith(
-                      color: AppTheme.primaryNavy,
-                      letterSpacing: 2.0,
+                      color: AppTheme.textPrimary,
+                      letterSpacing: 1.0,
+                      fontSize: 32,
                     ),
                   ),
-                  const SizedBox(height: 8),
-                  Text(
+                  const SizedBox(height: 6),
+                  const Text(
                     'Property Listing & Viewing Scheduler',
-                    style: theme.textTheme.titleMedium?.copyWith(
-                      color: AppTheme.textMuted,
+                    style: TextStyle(
+                      color: AppTheme.textSecondary,
+                      fontSize: 14,
                       fontWeight: FontWeight.w500,
                     ),
                     textAlign: TextAlign.center,
                   ),
-                  const SizedBox(height: 40),
+                  const SizedBox(height: 36),
 
-                  // Gateway Cards: Buyer vs Agent
+                  // Gateway Card: Buyer
                   Card(
                     child: Padding(
                       padding: const EdgeInsets.all(20.0),
@@ -122,30 +128,36 @@ class PublicLandingScreen extends StatelessWidget {
                               Container(
                                 padding: const EdgeInsets.all(12),
                                 decoration: BoxDecoration(
-                                  color: AppTheme.secondaryEmerald.withValues(alpha: 0.1),
-                                  borderRadius: BorderRadius.circular(12),
+                                  color: const Color(0xFF262626),
+                                  borderRadius: BorderRadius.circular(14),
+                                  border: Border.all(color: const Color(0xFF3D3D3D)),
                                 ),
                                 child: const Icon(
                                   Icons.search_rounded,
-                                  color: AppTheme.secondaryEmerald,
-                                  size: 28,
+                                  color: AppTheme.textPrimary,
+                                  size: 26,
                                 ),
                               ),
                               const SizedBox(width: 16),
-                              Expanded(
+                              const Expanded(
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
                                       'Property Buyer',
-                                      style: theme.textTheme.titleMedium?.copyWith(
+                                      style: TextStyle(
+                                        color: AppTheme.textPrimary,
                                         fontWeight: FontWeight.bold,
+                                        fontSize: 16,
                                       ),
                                     ),
-                                    const SizedBox(height: 2),
+                                    SizedBox(height: 2),
                                     Text(
-                                      'Browse real-time property listings and book viewing slots.',
-                                      style: theme.textTheme.bodySmall,
+                                      'Browse real-time listings & schedule property visits.',
+                                      style: TextStyle(
+                                        color: AppTheme.textSecondary,
+                                        fontSize: 12,
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -153,20 +165,39 @@ class PublicLandingScreen extends StatelessWidget {
                             ],
                           ),
                           const SizedBox(height: 16),
-                          SizedBox(
-                            width: double.infinity,
-                            child: FilledButton.icon(
-                              onPressed: () {
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (_) => const BrowsePropertiesScreen(),
+                          InkWell(
+                            onTap: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (_) => const BuyerMainScreen(),
+                                ),
+                              );
+                            },
+                            borderRadius: BorderRadius.circular(24),
+                            child: Container(
+                              height: 48,
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(24),
+                                gradient: const LinearGradient(
+                                  colors: [Color(0xFF5A5A5A), Color(0xFF2B2B2B)],
+                                ),
+                              ),
+                              alignment: Alignment.center,
+                              child: const Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(Icons.apartment, color: AppTheme.textPrimary, size: 20),
+                                  SizedBox(width: 8),
+                                  Text(
+                                    'Browse Properties',
+                                    style: TextStyle(
+                                      color: AppTheme.textPrimary,
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 14,
+                                    ),
                                   ),
-                                );
-                              },
-                              icon: const Icon(Icons.apartment),
-                              label: const Text('Browse Properties'),
-                              style: FilledButton.styleFrom(
-                                backgroundColor: AppTheme.secondaryEmerald,
+                                ],
                               ),
                             ),
                           ),
@@ -176,6 +207,7 @@ class PublicLandingScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 16),
 
+                  // Gateway Card: Agent
                   Card(
                     child: Padding(
                       padding: const EdgeInsets.all(20.0),
@@ -186,30 +218,36 @@ class PublicLandingScreen extends StatelessWidget {
                               Container(
                                 padding: const EdgeInsets.all(12),
                                 decoration: BoxDecoration(
-                                  color: AppTheme.primaryBlue.withValues(alpha: 0.1),
-                                  borderRadius: BorderRadius.circular(12),
+                                  color: const Color(0xFF262626),
+                                  borderRadius: BorderRadius.circular(14),
+                                  border: Border.all(color: const Color(0xFF3D3D3D)),
                                 ),
                                 child: const Icon(
                                   Icons.real_estate_agent_rounded,
-                                  color: AppTheme.primaryBlue,
-                                  size: 28,
+                                  color: AppTheme.textPrimary,
+                                  size: 26,
                                 ),
                               ),
                               const SizedBox(width: 16),
-                              Expanded(
+                              const Expanded(
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
                                       'Property Agent',
-                                      style: theme.textTheme.titleMedium?.copyWith(
+                                      style: TextStyle(
+                                        color: AppTheme.textPrimary,
                                         fontWeight: FontWeight.bold,
+                                        fontSize: 16,
                                       ),
                                     ),
-                                    const SizedBox(height: 2),
+                                    SizedBox(height: 2),
                                     Text(
-                                      'Login to post listings, upload photos, and manage slots.',
-                                      style: theme.textTheme.bodySmall,
+                                      'Sign in to manage listings & scheduled visits.',
+                                      style: TextStyle(
+                                        color: AppTheme.textSecondary,
+                                        fontSize: 12,
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -219,6 +257,7 @@ class PublicLandingScreen extends StatelessWidget {
                           const SizedBox(height: 16),
                           SizedBox(
                             width: double.infinity,
+                            height: 48,
                             child: ElevatedButton.icon(
                               onPressed: () {
                                 Navigator.of(context).push(
@@ -227,8 +266,8 @@ class PublicLandingScreen extends StatelessWidget {
                                   ),
                                 );
                               },
-                              icon: const Icon(Icons.login),
-                              label: const Text('Agent Login'),
+                              icon: const Icon(Icons.login, size: 20),
+                              label: const Text('Agent Portal Login'),
                             ),
                           ),
                         ],

@@ -15,8 +15,8 @@ void main() {
     );
 
     // Verify app title and buttons render
-    expect(find.text('HOMEFIND'), findsOneWidget);
+    expect(find.text('HomeFind'), findsOneWidget);
     expect(find.text('Browse Properties'), findsOneWidget);
-    expect(find.text('Agent Login'), findsOneWidget);
+    expect(find.text('Agent Portal Login'), findsOneWidget);
   });
 }

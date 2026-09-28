@@ -74,7 +74,7 @@ class _AgentHomeScreenState extends State<AgentHomeScreen> {
               'Logged in as $agentName (${user?.email ?? ''})',
               style: const TextStyle(
                 fontSize: 12,
-                color: AppTheme.textMuted,
+                color: AppTheme.textSecondary,
                 fontWeight: FontWeight.normal,
               ),
             ),
@@ -82,7 +82,7 @@ class _AgentHomeScreenState extends State<AgentHomeScreen> {
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.logout),
+            icon: const Icon(Icons.logout, size: 20),
             tooltip: 'Logout',
             onPressed: _logout,
           ),
@@ -93,7 +93,7 @@ class _AgentHomeScreenState extends State<AgentHomeScreen> {
           // Filter Tabs (My Listings vs Scheduled Visits)
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            color: Colors.white,
+            color: AppTheme.darkBackground,
             child: Row(
               children: [
                 Expanded(
@@ -121,7 +121,7 @@ class _AgentHomeScreenState extends State<AgentHomeScreen> {
               ],
             ),
           ),
-          const Divider(height: 1, color: AppTheme.borderSubtle),
+          const Divider(height: 1, color: AppTheme.darkBorder),
 
           // Main View Area
           Expanded(
@@ -140,8 +140,8 @@ class _AgentHomeScreenState extends State<AgentHomeScreen> {
               },
               icon: const Icon(Icons.add_a_photo),
               label: const Text('New Property Listing'),
-              backgroundColor: AppTheme.primaryBlue,
-              foregroundColor: Colors.white,
+              backgroundColor: const Color(0xFF3A3A3A),
+              foregroundColor: AppTheme.textPrimary,
             )
           : null,
     );
@@ -166,7 +166,7 @@ class _AgentHomeScreenState extends State<AgentHomeScreen> {
               padding: const EdgeInsets.all(24.0),
               child: Text(
                 'Notice: ${snapshot.error}',
-                style: const TextStyle(color: Colors.red),
+                style: const TextStyle(color: Colors.redAccent),
                 textAlign: TextAlign.center,
               ),
             ),
@@ -224,7 +224,7 @@ class _AgentHomeScreenState extends State<AgentHomeScreen> {
                             ),
                           );
                         },
-                        icon: const Icon(Icons.add, size: 20),
+                        icon: const Icon(Icons.add, size: 18),
                         label: const Text('Add Listing'),
                       ),
                     ],
@@ -285,7 +285,7 @@ class _AgentHomeScreenState extends State<AgentHomeScreen> {
                   padding: const EdgeInsets.all(24.0),
                   child: Text(
                     'Notice: ${snapshot.error}',
-                    style: const TextStyle(color: Colors.red),
+                    style: const TextStyle(color: Colors.redAccent),
                     textAlign: TextAlign.center,
                   ),
                 ),
@@ -336,95 +336,141 @@ class _AgentHomeScreenState extends State<AgentHomeScreen> {
   }
 
   Widget _buildScheduledVisitCard(BuildContext context, Booking booking) {
-    return Card(
+    return Container(
       margin: const EdgeInsets.only(bottom: 12),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-        side: const BorderSide(color: AppTheme.borderSubtle),
+      padding: const EdgeInsets.all(16.0),
+      decoration: BoxDecoration(
+        color: const Color(0xFF181818),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: AppTheme.darkBorder, width: 0.8),
       ),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Property Photo
-            ClipRRect(
-              borderRadius: BorderRadius.circular(12),
-              child: SizedBox(
-                width: 95,
-                height: 95,
-                child: _buildVisitImage(booking.propertyImage),
-              ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Property Photo
+          ClipRRect(
+            borderRadius: BorderRadius.circular(14),
+            child: SizedBox(
+              width: 95,
+              height: 95,
+              child: _buildVisitImage(booking.propertyImage),
             ),
-            const SizedBox(width: 16),
+          ),
+          const SizedBox(width: 16),
 
-            // Visit & Buyer Details
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        child: Text(
-                          booking.propertyTitle,
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: AppTheme.primaryNavy,
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
+          // Visit & Buyer Details
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: Text(
+                        booking.propertyTitle,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: AppTheme.textPrimary,
                         ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                       ),
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                        decoration: BoxDecoration(
-                          color: const Color(0xFFD1FAE5),
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: const Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Icon(Icons.check_circle, size: 14, color: AppTheme.secondaryEmerald),
-                            SizedBox(width: 4),
-                            Text(
-                              'Confirmed Visit',
-                              style: TextStyle(
-                                color: Color(0xFF065F46),
-                                fontSize: 12,
-                                fontWeight: FontWeight.bold,
-                              ),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF065F46).withValues(alpha: 0.4),
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(color: AppTheme.accentEmerald, width: 0.8),
+                      ),
+                      child: const Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(Icons.check_circle, size: 14, color: AppTheme.accentEmerald),
+                          SizedBox(width: 4),
+                          Text(
+                            'Confirmed Visit',
+                            style: TextStyle(
+                              color: AppTheme.accentEmerald,
+                              fontSize: 11,
+                              fontWeight: FontWeight.bold,
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                  const SizedBox(height: 8),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 8),
 
-                  // Buyer Name & Email
-                  Wrap(
-                    crossAxisAlignment: WrapCrossAlignment.center,
-                    spacing: 12,
+                // Buyer Name & Email
+                Wrap(
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  spacing: 12,
+                  runSpacing: 4,
+                  children: [
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Icon(Icons.person, size: 16, color: AppTheme.textSecondary),
+                        const SizedBox(width: 4),
+                        const Text(
+                          'Buyer: ',
+                          style: TextStyle(fontSize: 13, color: AppTheme.textMuted),
+                        ),
+                        Text(
+                          booking.buyerName,
+                          style: const TextStyle(
+                            fontSize: 13,
+                            fontWeight: FontWeight.bold,
+                            color: AppTheme.textPrimary,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Icon(Icons.email_outlined, size: 14, color: AppTheme.textMuted),
+                        const SizedBox(width: 4),
+                        Text(
+                          booking.buyerEmail,
+                          style: const TextStyle(
+                            fontSize: 13,
+                            color: AppTheme.textSecondary,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 10),
+
+                // Visit Date & Time Badge
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF222222),
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(color: const Color(0xFF2E2E2E), width: 0.8),
+                  ),
+                  child: Wrap(
+                    spacing: 16,
                     runSpacing: 4,
                     children: [
                       Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          const Icon(Icons.person, size: 16, color: AppTheme.primaryBlue),
-                          const SizedBox(width: 4),
-                          const Text(
-                            'Buyer: ',
-                            style: TextStyle(fontSize: 13, color: AppTheme.textMuted),
-                          ),
+                          const Icon(Icons.calendar_month, size: 14, color: AppTheme.textSecondary),
+                          const SizedBox(width: 6),
                           Text(
-                            booking.buyerName,
+                            booking.formattedDate,
                             style: const TextStyle(
-                              fontSize: 13,
-                              fontWeight: FontWeight.bold,
-                              color: AppTheme.textDark,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
+                              color: AppTheme.textPrimary,
                             ),
                           ),
                         ],
@@ -432,70 +478,25 @@ class _AgentHomeScreenState extends State<AgentHomeScreen> {
                       Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          const Icon(Icons.email_outlined, size: 14, color: AppTheme.textMuted),
-                          const SizedBox(width: 4),
+                          const Icon(Icons.access_time, size: 14, color: AppTheme.textSecondary),
+                          const SizedBox(width: 6),
                           Text(
-                            booking.buyerEmail,
+                            '${booking.startTime} - ${booking.endTime}',
                             style: const TextStyle(
-                              fontSize: 13,
-                              color: AppTheme.textMuted,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
+                              color: AppTheme.textPrimary,
                             ),
                           ),
                         ],
                       ),
                     ],
                   ),
-                  const SizedBox(height: 10),
-
-                  // Visit Date & Time Badge
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFF1F5F9),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Wrap(
-                      spacing: 16,
-                      runSpacing: 4,
-                      children: [
-                        Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            const Icon(Icons.calendar_month, size: 14, color: AppTheme.primaryBlue),
-                            const SizedBox(width: 6),
-                            Text(
-                              booking.formattedDate,
-                              style: const TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.w600,
-                                color: AppTheme.textDark,
-                              ),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            const Icon(Icons.access_time, size: 14, color: AppTheme.primaryBlue),
-                            const SizedBox(width: 6),
-                            Text(
-                              '${booking.startTime} - ${booking.endTime}',
-                              style: const TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.w600,
-                                color: AppTheme.textDark,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

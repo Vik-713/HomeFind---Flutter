@@ -20,81 +20,103 @@ class PropertyCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     final imagePath = property.primaryImage;
 
-    return Card(
+    return Container(
+      decoration: BoxDecoration(
+        color: const Color(0xFF181818),
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(color: const Color(0xFF2E2E2E), width: 0.8),
+      ),
       clipBehavior: Clip.antiAlias,
       child: InkWell(
         onTap: onTap,
+        borderRadius: BorderRadius.circular(24),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // 1. Property Photo Header
+            // 1. Property Photo Header with Dark Gradient Overlay & Badges
             Stack(
               children: [
                 AspectRatio(
                   aspectRatio: 16 / 10,
                   child: _buildPropertyImage(imagePath),
                 ),
-                // Property Type Badge
-                Positioned(
-                  top: 12,
-                  left: 12,
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                // Gradient Overlay
+                Positioned.fill(
+                  child: DecoratedBox(
                     decoration: BoxDecoration(
-                      color: AppTheme.primaryNavy.withValues(alpha: 0.85),
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [
+                          Colors.black.withValues(alpha: 0.2),
+                          Colors.black.withValues(alpha: 0.6),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                // Property Type / Featured Badge
+                Positioned(
+                  top: 10,
+                  left: 10,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF3A3A3A),
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Text(
                       property.propertyType,
                       style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 12,
+                        color: AppTheme.textPrimary,
+                        fontSize: 11,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
                   ),
                 ),
+                // Heart Icon
+                const Positioned(
+                  top: 10,
+                  right: 10,
+                  child: Icon(
+                    Icons.favorite_border,
+                    color: Colors.white,
+                    size: 20,
+                  ),
+                ),
               ],
             ),
 
-            // Card Body Content
+            // 2. Card Body Content
             Padding(
-              padding: const EdgeInsets.all(14.0),
+              padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 12.0),
               child: Column(
+                mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // 2. Clearly Readable Price
-                  Text(
-                    property.formattedPrice,
-                    style: theme.textTheme.titleLarge?.copyWith(
-                      color: AppTheme.secondaryEmerald,
-                      fontWeight: FontWeight.w800,
-                      fontSize: 20,
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-
                   // Title
                   Text(
                     property.title,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: theme.textTheme.titleMedium?.copyWith(
+                    style: const TextStyle(
+                      fontSize: 15,
                       fontWeight: FontWeight.bold,
+                      color: AppTheme.textPrimary,
                     ),
                   ),
-                  const SizedBox(height: 8),
+                  const SizedBox(height: 3),
 
-                  // 3. Location
+                  // Location
                   Row(
                     children: [
                       const Icon(
-                        Icons.location_on,
-                        size: 16,
-                        color: AppTheme.primaryBlue,
+                        Icons.location_on_outlined,
+                        size: 14,
+                        color: AppTheme.textSecondary,
                       ),
                       const SizedBox(width: 4),
                       Expanded(
@@ -102,77 +124,97 @@ class PropertyCard extends StatelessWidget {
                           property.location,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
-                          style: theme.textTheme.bodySmall?.copyWith(
-                            color: AppTheme.textDark,
-                            fontWeight: FontWeight.w500,
+                          style: const TextStyle(
+                            fontSize: 12,
+                            color: AppTheme.textSecondary,
                           ),
                         ),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 10),
-                  const Divider(height: 1, color: AppTheme.borderSubtle),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 8),
 
-                  // 4. Bedrooms & 5. Area Specs
+                  // Price
+                  Row(
+                    textBaseline: TextBaseline.alphabetic,
+                    crossAxisAlignment: CrossAxisAlignment.baseline,
+                    children: [
+                      Text(
+                        property.formattedPrice,
+                        style: const TextStyle(
+                          color: Color(0xFFE0E0E0),
+                          fontWeight: FontWeight.w800,
+                          fontSize: 17,
+                        ),
+                      ),
+                      const SizedBox(width: 4),
+                      const Text(
+                        '/month',
+                        style: TextStyle(
+                          color: AppTheme.textMuted,
+                          fontSize: 11,
+                          fontWeight: FontWeight.normal,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  const Divider(height: 1, color: Color(0xFF262626)),
+                  const SizedBox(height: 8),
+
+                  // Specs (Beds, Baths, Area)
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      // Bedroom count
                       Row(
                         children: [
-                          const Icon(Icons.king_bed_outlined,
-                              size: 18, color: AppTheme.textMuted),
+                          const Icon(Icons.king_bed_outlined, size: 16, color: AppTheme.textMuted),
                           const SizedBox(width: 4),
                           Text(
                             '${property.bedrooms} Beds',
-                            style: theme.textTheme.bodyMedium?.copyWith(
-                              fontWeight: FontWeight.w600,
-                            ),
+                            style: const TextStyle(fontSize: 12, color: AppTheme.textSecondary),
                           ),
                         ],
                       ),
-                      // Bathroom count
                       Row(
                         children: [
-                          const Icon(Icons.bathtub_outlined,
-                              size: 18, color: AppTheme.textMuted),
+                          const Icon(Icons.bathtub_outlined, size: 16, color: AppTheme.textMuted),
                           const SizedBox(width: 4),
                           Text(
                             '${property.bathrooms} Baths',
-                            style: theme.textTheme.bodyMedium?.copyWith(
-                              fontWeight: FontWeight.w600,
-                            ),
+                            style: const TextStyle(fontSize: 12, color: AppTheme.textSecondary),
                           ),
                         ],
                       ),
-                      // Area
                       Row(
                         children: [
-                          const Icon(Icons.square_foot,
-                              size: 18, color: AppTheme.textMuted),
+                          const Icon(Icons.square_foot, size: 16, color: AppTheme.textMuted),
                           const SizedBox(width: 4),
                           Text(
                             property.formattedArea,
-                            style: theme.textTheme.bodyMedium?.copyWith(
-                              fontWeight: FontWeight.w600,
-                            ),
+                            style: const TextStyle(fontSize: 12, color: AppTheme.textSecondary),
                           ),
                         ],
                       ),
                     ],
                   ),
+
                   if (showBookButton && onBookViewing != null) ...[
-                    const SizedBox(height: 14),
+                    const SizedBox(height: 12),
                     SizedBox(
                       width: double.infinity,
-                      height: 42,
+                      height: 40,
                       child: FilledButton.icon(
                         onPressed: onBookViewing,
-                        icon: const Icon(Icons.calendar_month, size: 18),
+                        icon: const Icon(Icons.calendar_month, size: 16),
                         label: const Text('Book Viewing'),
                         style: FilledButton.styleFrom(
+                          backgroundColor: const Color(0xFF2A2A2A),
+                          foregroundColor: AppTheme.textPrimary,
                           padding: EdgeInsets.zero,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
                         ),
                       ),
                     ),

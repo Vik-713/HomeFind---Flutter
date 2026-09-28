@@ -111,4 +111,33 @@ class BookingService {
       return list;
     });
   }
+
+  /// Get stream of all scheduled visits/bookings across all properties
+  Stream<List<Booking>> getAllBookingsStream() {
+    return _bookingsCollection.snapshots().map((snapshot) {
+      final list = snapshot.docs.map((doc) => Booking.fromFirestore(doc)).toList();
+      list.sort((a, b) => b.date.compareTo(a.date));
+      return list;
+    });
+  }
+
+  /// Cancel / Delete a scheduled viewing booking and free up the slot
+  Future<void> cancelBooking(String bookingId, String slotId) async {
+    try {
+      await _firestore.runTransaction((transaction) async {
+        final bookingRef = _bookingsCollection.doc(bookingId);
+        transaction.delete(bookingRef);
+
+        if (slotId.isNotEmpty) {
+          final slotRef = _slotsCollection.doc(slotId);
+          final slotSnap = await transaction.get(slotRef);
+          if (slotSnap.exists) {
+            transaction.update(slotRef, {'isAvailable': true});
+          }
+        }
+      });
+    } catch (e) {
+      await _bookingsCollection.doc(bookingId).delete();
+    }
+  }
 }

@@ -19,7 +19,6 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     final property = widget.property;
     final images = property.imageUrls;
 
@@ -30,42 +29,66 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
       body: SingleChildScrollView(
         child: Center(
           child: Container(
-            constraints: const BoxConstraints(maxWidth: 900),
+            constraints: const BoxConstraints(maxWidth: 850),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // 1. Photo Gallery / Carousel Header
+                // 1. Photo Gallery Carousel Header
                 if (images.isNotEmpty) ...[
                   SizedBox(
-                    height: 360,
-                    child: PageView.builder(
-                      itemCount: images.length,
-                      onPageChanged: (index) {
-                        setState(() {
-                          _activeImageIndex = index;
-                        });
-                      },
-                      itemBuilder: (context, index) {
-                        final imagePath = images[index];
-                        return _buildPropertyImage(imagePath);
-                      },
+                    height: 320,
+                    child: Stack(
+                      children: [
+                        PageView.builder(
+                          itemCount: images.length,
+                          onPageChanged: (index) {
+                            setState(() {
+                              _activeImageIndex = index;
+                            });
+                          },
+                          itemBuilder: (context, index) {
+                            final imagePath = images[index];
+                            return _buildPropertyImage(imagePath);
+                          },
+                        ),
+                        // Type Badge Overlay
+                        Positioned(
+                          top: 16,
+                          left: 16,
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFF3A3A3A),
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: Text(
+                              property.propertyType,
+                              style: const TextStyle(
+                                color: AppTheme.textPrimary,
+                                fontSize: 12,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                   if (images.length > 1) ...[
-                    const SizedBox(height: 8),
+                    const SizedBox(height: 10),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: List.generate(
                         images.length,
                         (index) => Container(
-                          width: _activeImageIndex == index ? 24 : 8,
-                          height: 8,
+                          width: _activeImageIndex == index ? 22 : 6,
+                          height: 6,
                           margin: const EdgeInsets.symmetric(horizontal: 3),
                           decoration: BoxDecoration(
                             color: _activeImageIndex == index
-                                ? AppTheme.primaryBlue
-                                : Colors.grey.shade300,
-                            borderRadius: BorderRadius.circular(4),
+                                ? AppTheme.textPrimary
+                                : const Color(0xFF4A4A4A),
+                            borderRadius: BorderRadius.circular(3),
                           ),
                         ),
                       ),
@@ -74,27 +97,32 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                 ] else
                   _buildPlaceholder(),
 
-                // 2. Property Main Info
+                // 2. Property Details Body
                 Padding(
-                  padding: const EdgeInsets.all(24.0),
+                  padding: const EdgeInsets.all(20.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Price & Property Type
+                      // Price Tag
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.baseline,
+                        textBaseline: TextBaseline.alphabetic,
                         children: [
                           Text(
                             property.formattedPrice,
-                            style: theme.textTheme.displayLarge?.copyWith(
-                              color: AppTheme.secondaryEmerald,
-                              fontSize: 28,
+                            style: const TextStyle(
+                              color: Color(0xFFE0E0E0),
+                              fontSize: 26,
                               fontWeight: FontWeight.w800,
                             ),
                           ),
-                          Chip(
-                            label: Text(property.propertyType),
-                            backgroundColor: AppTheme.primaryBlue.withValues(alpha: 0.1),
+                          const SizedBox(width: 6),
+                          const Text(
+                            '/month',
+                            style: TextStyle(
+                              color: AppTheme.textMuted,
+                              fontSize: 13,
+                            ),
                           ),
                         ],
                       ),
@@ -103,19 +131,24 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                       // Title
                       Text(
                         property.title,
-                        style: theme.textTheme.headlineMedium,
+                        style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: AppTheme.textPrimary,
+                        ),
                       ),
-                      const SizedBox(height: 8),
+                      const SizedBox(height: 6),
 
                       // Location
                       Row(
                         children: [
-                          const Icon(Icons.location_on, color: AppTheme.primaryBlue),
-                          const SizedBox(width: 6),
+                          const Icon(Icons.location_on_outlined, color: AppTheme.textSecondary, size: 18),
+                          const SizedBox(width: 4),
                           Text(
                             property.location,
-                            style: theme.textTheme.titleMedium?.copyWith(
-                              color: AppTheme.textMuted,
+                            style: const TextStyle(
+                              color: AppTheme.textSecondary,
+                              fontSize: 14,
                               fontWeight: FontWeight.w500,
                             ),
                           ),
@@ -123,23 +156,24 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                       ),
                       const SizedBox(height: 20),
 
-                      // Key Features Bar
+                      // Key Specs Container
                       Container(
-                        padding: const EdgeInsets.all(16),
+                        padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
                         decoration: BoxDecoration(
-                          color: const Color(0xFFF1F5F9),
-                          borderRadius: BorderRadius.circular(16),
+                          color: const Color(0xFF191919),
+                          borderRadius: BorderRadius.circular(20),
+                          border: Border.all(color: const Color(0xFF2E2E2E), width: 0.8),
                         ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
                             _buildFeatureItem(
                               icon: Icons.king_bed_outlined,
-                              label: '${property.bedrooms} Bedrooms',
+                              label: '${property.bedrooms} Beds',
                             ),
                             _buildFeatureItem(
                               icon: Icons.bathtub_outlined,
-                              label: '${property.bathrooms} Bathrooms',
+                              label: '${property.bathrooms} Baths',
                             ),
                             _buildFeatureItem(
                               icon: Icons.square_foot,
@@ -150,35 +184,111 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                       ),
                       const SizedBox(height: 24),
 
-                      // Description Section
-                      Text(
+                      // Verified Agent Card (From Mockup Specs)
+                      Container(
+                        padding: const EdgeInsets.all(14),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF191919),
+                          borderRadius: BorderRadius.circular(20),
+                          border: Border.all(color: const Color(0xFF2E2E2E), width: 0.8),
+                        ),
+                        child: Row(
+                          children: [
+                            Container(
+                              width: 42,
+                              height: 42,
+                              decoration: const BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Color(0xFF2A2A2A),
+                              ),
+                              child: const Icon(Icons.person, color: AppTheme.textPrimary, size: 22),
+                            ),
+                            const SizedBox(width: 12),
+                            const Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Property Listing Agent',
+                                    style: TextStyle(
+                                      color: AppTheme.textPrimary,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                  SizedBox(height: 2),
+                                  Text(
+                                    'Verified HomeFind Partner',
+                                    style: TextStyle(
+                                      color: AppTheme.textSecondary,
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Container(
+                              width: 36,
+                              height: 36,
+                              decoration: BoxDecoration(
+                                color: const Color(0xFF2A2A2A),
+                                borderRadius: BorderRadius.circular(18),
+                              ),
+                              child: const Icon(Icons.message_outlined, color: Color(0xFFC9C9C9), size: 18),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 24),
+
+                      // Description Header & Body
+                      const Text(
                         'About This Property',
-                        style: theme.textTheme.titleLarge,
+                        style: TextStyle(
+                          fontSize: 17,
+                          fontWeight: FontWeight.bold,
+                          color: AppTheme.textPrimary,
+                        ),
                       ),
                       const SizedBox(height: 8),
                       Text(
                         property.description,
-                        style: theme.textTheme.bodyLarge?.copyWith(
+                        style: const TextStyle(
+                          fontSize: 14,
                           height: 1.5,
-                          color: AppTheme.textDark,
+                          color: AppTheme.textSecondary,
                         ),
                       ),
                       const SizedBox(height: 32),
 
-                      // Direct Viewing Scheduler CTA
-                      SizedBox(
-                        width: double.infinity,
-                        height: 54,
-                        child: FilledButton.icon(
-                          onPressed: () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (_) => ViewingSchedulerScreen(property: property),
-                              ),
-                            );
-                          },
-                          icon: const Icon(Icons.calendar_month, size: 22),
-                          label: const Text('Schedule Property Viewing'),
+                      // Schedule Viewing CTA Button (Matching Mockup Gradient Style)
+                      InkWell(
+                        onTap: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (_) => ViewingSchedulerScreen(property: property),
+                            ),
+                          );
+                        },
+                        borderRadius: BorderRadius.circular(26),
+                        child: Container(
+                          height: 52,
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(26),
+                            gradient: const LinearGradient(
+                              colors: [Color(0xFF5A5A5A), Color(0xFF2B2B2B)],
+                            ),
+                          ),
+                          alignment: Alignment.center,
+                          child: const Text(
+                            'Schedule Viewing',
+                            style: TextStyle(
+                              color: AppTheme.textPrimary,
+                              fontSize: 15,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
                         ),
                       ),
                     ],
@@ -195,14 +305,14 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
   Widget _buildFeatureItem({required IconData icon, required String label}) {
     return Column(
       children: [
-        Icon(icon, color: AppTheme.primaryNavy, size: 26),
-        const SizedBox(height: 6),
+        Icon(icon, color: AppTheme.textPrimary, size: 22),
+        const SizedBox(height: 4),
         Text(
           label,
           style: const TextStyle(
-            fontWeight: FontWeight.bold,
-            color: AppTheme.textDark,
-            fontSize: 13,
+            fontWeight: FontWeight.w600,
+            color: AppTheme.textSecondary,
+            fontSize: 12,
           ),
         ),
       ],
@@ -228,9 +338,9 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
   Widget _buildPlaceholder() {
     return Container(
       height: 280,
-      color: Colors.grey.shade200,
+      color: const Color(0xFF1E1E1E),
       child: const Center(
-        child: Icon(Icons.apartment, size: 72, color: Colors.grey),
+        child: Icon(Icons.apartment, size: 64, color: AppTheme.textMuted),
       ),
     );
   }

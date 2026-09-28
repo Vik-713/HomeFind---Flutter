@@ -26,11 +26,12 @@ class _BrowsePropertiesScreenState extends State<BrowsePropertiesScreen> {
 
   final List<String> _typeFilters = [
     'All',
+    '2 BHK',
     'Apartment',
+    'Under ₹50k',
     'Villa',
     'Penthouse',
     'Studio',
-    'Townhouse',
   ];
 
   @override
@@ -38,134 +39,254 @@ class _BrowsePropertiesScreenState extends State<BrowsePropertiesScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Row(
-          children: const [
-            Icon(Icons.home_work_rounded, color: AppTheme.primaryBlue),
-            SizedBox(width: 8),
-            Text(
-              'HOMEFIND',
+          children: [
+            Container(
+              width: 32,
+              height: 32,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                gradient: const LinearGradient(
+                  colors: [Color(0xFF3D3D3D), Color(0xFF1A1A1A)],
+                ),
+                border: Border.all(color: const Color(0xFF4A4A4A), width: 0.5),
+              ),
+              child: const Icon(Icons.home, size: 18, color: Color(0xFFE6E6E6)),
+            ),
+            const SizedBox(width: 10),
+            const Text(
+              'HomeFind',
               style: TextStyle(
-                fontWeight: FontWeight.w800,
-                letterSpacing: 1.2,
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: AppTheme.textPrimary,
               ),
             ),
           ],
         ),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.lock_person_outlined),
-            tooltip: 'Agent Login',
-            onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(builder: (_) => const LoginScreen()),
-              );
-            },
-          ),
-          const SizedBox(width: 8),
-        ],
-      ),
-      body: Column(
-        children: [
-          // Search & Filter Header Bar
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            color: Colors.white,
-            child: Column(
-              children: [
-                // Search Bar
-                TextField(
-                  onChanged: (val) {
-                    setState(() {
-                      _searchQuery = val.trim().toLowerCase();
-                    });
-                  },
-                  decoration: InputDecoration(
-                    hintText: 'Search by title, location, or price...',
-                    prefixIcon: const Icon(Icons.search, color: AppTheme.primaryBlue),
-                    suffixIcon: _searchQuery.isNotEmpty
-                        ? IconButton(
-                            icon: const Icon(Icons.clear),
-                            onPressed: () {
-                              setState(() {
-                                _searchQuery = '';
-                              });
-                            },
-                          )
-                        : null,
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                  ),
-                ),
-                const SizedBox(height: 10),
-
-                // Category Filter Pills
-                SizedBox(
-                  height: 36,
-                  child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: _typeFilters.length,
-                    itemBuilder: (context, index) {
-                      final filter = _typeFilters[index];
-                      final isSelected = _selectedTypeFilter == filter;
-
-                      return Padding(
-                        padding: const EdgeInsets.only(right: 8.0),
-                        child: FilterChip(
-                          selected: isSelected,
-                          label: Text(filter),
-                          onSelected: (selected) {
-                            setState(() {
-                              _selectedTypeFilter = filter;
-                            });
-                          },
-                          selectedColor: AppTheme.primaryBlue,
-                          labelStyle: TextStyle(
-                            color: isSelected ? Colors.white : AppTheme.textDark,
-                            fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
-                            fontSize: 13,
-                          ),
-                          backgroundColor: Colors.grey.shade100,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
-                            side: BorderSide(
-                              color: isSelected
-                                  ? AppTheme.primaryBlue
-                                  : AppTheme.borderSubtle,
-                            ),
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                ),
-              ],
+            margin: const EdgeInsets.only(right: 12),
+            decoration: BoxDecoration(
+              color: const Color(0xFF1C1C1C),
+              shape: BoxShape.circle,
+              border: Border.all(color: const Color(0xFF2E2E2E), width: 0.8),
+            ),
+            child: IconButton(
+              icon: const Icon(Icons.lock_person_outlined, size: 20, color: AppTheme.textPrimary),
+              tooltip: 'Agent Portal Login',
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (_) => const LoginScreen()),
+                );
+              },
             ),
           ),
-          const Divider(height: 1, color: AppTheme.borderSubtle),
+        ],
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: 8),
+            // 1. Hero Banner + Overlapping Search Bar matching Mockup Specs
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Stack(
+                clipBehavior: Clip.none,
+                children: [
+                  // Hero Card Container
+                  Container(
+                    height: 200,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(24),
+                      border: Border.all(color: const Color(0xFF2E2E2E), width: 0.8),
+                      image: const DecorationImage(
+                        image: AssetImage('assets/images/property1.jpg'),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(24),
+                        gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: [
+                            Colors.black.withValues(alpha: 0.2),
+                            Colors.black.withValues(alpha: 0.88),
+                          ],
+                        ),
+                      ),
+                      padding: const EdgeInsets.only(left: 20, right: 20, top: 28, bottom: 54),
+                      alignment: Alignment.topLeft,
+                      child: const Text(
+                        "Find a place you'll love\nto call home",
+                        style: TextStyle(
+                          color: AppTheme.textPrimary,
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                          height: 1.25,
+                        ),
+                      ),
+                    ),
+                  ),
+                  // Overlapping Pill Search Bar (Matching Mockup Specs)
+                  Positioned(
+                    bottom: -22,
+                    left: 14,
+                    right: 14,
+                    child: Container(
+                      clipBehavior: Clip.antiAlias,
+                      decoration: BoxDecoration(
+                        gradient: const LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: [Color(0xFF232323), Color(0xFF171717)],
+                        ),
+                        borderRadius: BorderRadius.circular(28),
+                        border: Border.all(color: const Color(0xFF383838), width: 0.8),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withValues(alpha: 0.4),
+                            blurRadius: 10,
+                            offset: const Offset(0, 4),
+                          ),
+                        ],
+                      ),
+                      child: TextField(
+                        onChanged: (val) {
+                          setState(() {
+                            _searchQuery = val.trim().toLowerCase();
+                          });
+                        },
+                        style: const TextStyle(color: AppTheme.textPrimary, fontSize: 13),
+                        decoration: InputDecoration(
+                          filled: false,
+                          hintText: 'Search by location, property...',
+                          hintStyle: const TextStyle(color: Color(0xFF6B6B6B), fontSize: 13),
+                          prefixIcon: const Icon(Icons.search, color: Color(0xFF9A9A9A), size: 18),
+                          suffixIcon: _searchQuery.isNotEmpty
+                              ? IconButton(
+                                  icon: const Icon(Icons.clear, color: AppTheme.textSecondary, size: 18),
+                                  onPressed: () {
+                                    setState(() {
+                                      _searchQuery = '';
+                                    });
+                                  },
+                                )
+                              : null,
+                          border: InputBorder.none,
+                          enabledBorder: InputBorder.none,
+                          focusedBorder: InputBorder.none,
+                          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 36),
 
-          // Real-time Firestore Stream Body
-          Expanded(
-            child: StreamBuilder<List<Property>>(
+            // 3. Category Filter Chips
+            SizedBox(
+              height: 38,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                itemCount: _typeFilters.length,
+                itemBuilder: (context, index) {
+                  final filter = _typeFilters[index];
+                  final isSelected = _selectedTypeFilter == filter;
+
+                  return Padding(
+                    padding: const EdgeInsets.only(right: 8.0),
+                    child: InkWell(
+                      onTap: () {
+                        setState(() {
+                          _selectedTypeFilter = filter;
+                        });
+                      },
+                      borderRadius: BorderRadius.circular(20),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          gradient: isSelected
+                              ? const LinearGradient(
+                                  colors: [Color(0xFF5A5A5A), Color(0xFF3A3A3A)],
+                                )
+                              : null,
+                          color: isSelected ? null : const Color(0xFF1C1C1C),
+                          border: Border.all(
+                            color: isSelected ? const Color(0xFF6B6B6B) : const Color(0xFF2E2E2E),
+                            width: 0.8,
+                          ),
+                        ),
+                        child: Text(
+                          filter,
+                          style: TextStyle(
+                            color: isSelected ? AppTheme.textPrimary : AppTheme.textSecondary,
+                            fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
+                            fontSize: 12,
+                          ),
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+            const SizedBox(height: 18),
+
+            // 4. Section Title
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Text(
+                'Featured properties',
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                    ),
+              ),
+            ),
+            const SizedBox(height: 12),
+
+            // 5. Real-time Firestore Stream Grid Body
+            StreamBuilder<List<Property>>(
               stream: _propertyService.getPropertiesStream(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const LoadingWidget(message: 'Fetching real-time listings from Firestore...');
+                  return const Padding(
+                    padding: EdgeInsets.all(40.0),
+                    child: LoadingWidget(message: 'Fetching real-time listings from Firestore...'),
+                  );
                 }
 
                 if (snapshot.hasError) {
-                  return EmptyStateWidget(
-                    icon: Icons.error_outline,
-                    title: 'Firestore Access Notice',
-                    message:
-                        'Unable to access Cloud Firestore. Please check your internet connection or publish firestore.rules in Firebase Console.',
+                  return const Padding(
+                    padding: EdgeInsets.all(24.0),
+                    child: EmptyStateWidget(
+                      icon: Icons.error_outline,
+                      title: 'Firestore Notice',
+                      message: 'Unable to access Cloud Firestore. Please check your connection.',
+                    ),
                   );
                 }
 
                 final rawProperties = snapshot.data ?? [];
 
-                // Apply client-side search & category filtering
+                // Filter logic
                 final filteredProperties = rawProperties.where((property) {
-                  final matchesType = _selectedTypeFilter == 'All' ||
-                      property.propertyType.toLowerCase() ==
-                          _selectedTypeFilter.toLowerCase();
+                  bool matchesType = true;
+                  if (_selectedTypeFilter == 'Under ₹50k') {
+                    matchesType = property.price <= 50000;
+                  } else if (_selectedTypeFilter == '2 BHK') {
+                    matchesType = property.bedrooms == 2;
+                  } else if (_selectedTypeFilter != 'All') {
+                    matchesType = property.propertyType.toLowerCase() == _selectedTypeFilter.toLowerCase();
+                  }
 
                   final matchesSearch = _searchQuery.isEmpty ||
                       property.title.toLowerCase().contains(_searchQuery) ||
@@ -177,36 +298,41 @@ class _BrowsePropertiesScreenState extends State<BrowsePropertiesScreen> {
                 }).toList();
 
                 if (rawProperties.isEmpty) {
-                  return EmptyStateWidget(
-                    icon: Icons.home_work_outlined,
-                    title: 'No Properties Available Yet',
-                    message:
-                        'No property listings found in Cloud Firestore. Log in as an agent to create a property listing.',
-                    actionLabel: 'Agent Login',
-                    onAction: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(builder: (_) => const LoginScreen()),
-                      );
-                    },
+                  return Padding(
+                    padding: const EdgeInsets.all(24.0),
+                    child: EmptyStateWidget(
+                      icon: Icons.home_work_outlined,
+                      title: 'No Properties Available Yet',
+                      message: 'No property listings found in Cloud Firestore. Log in as an agent to post a property listing.',
+                      actionLabel: 'Agent Login',
+                      onAction: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(builder: (_) => const LoginScreen()),
+                        );
+                      },
+                    ),
                   );
                 }
 
                 if (filteredProperties.isEmpty) {
-                  return EmptyStateWidget(
-                    icon: Icons.search_off_rounded,
-                    title: 'No Matching Properties',
-                    message: 'No property listings match your search criteria "$_searchQuery".',
-                    actionLabel: 'Clear Search',
-                    onAction: () {
-                      setState(() {
-                        _searchQuery = '';
-                        _selectedTypeFilter = 'All';
-                      });
-                    },
+                  return Padding(
+                    padding: const EdgeInsets.all(24.0),
+                    child: EmptyStateWidget(
+                      icon: Icons.search_off_rounded,
+                      title: 'No Matching Properties',
+                      message: 'No property listings match your search criteria "$_searchQuery".',
+                      actionLabel: 'Clear Search',
+                      onAction: () {
+                        setState(() {
+                          _searchQuery = '';
+                          _selectedTypeFilter = 'All';
+                        });
+                      },
+                    ),
                   );
                 }
 
-                // Responsive Layout using LayoutBuilder
+                // Responsive Layout Builder
                 return LayoutBuilder(
                   builder: (context, constraints) {
                     int crossAxisCount = 1;
@@ -214,26 +340,28 @@ class _BrowsePropertiesScreenState extends State<BrowsePropertiesScreen> {
 
                     if (constraints.maxWidth >= 1200) {
                       crossAxisCount = 4;
-                      childAspectRatio = 0.72;
+                      childAspectRatio = 0.81;
                     } else if (constraints.maxWidth >= 900) {
                       crossAxisCount = 3;
-                      childAspectRatio = 0.74;
+                      childAspectRatio = 0.81;
                     } else if (constraints.maxWidth >= 600) {
                       crossAxisCount = 2;
-                      childAspectRatio = 0.76;
+                      childAspectRatio = 0.80;
                     } else {
                       crossAxisCount = 1;
-                      childAspectRatio = 0.78;
+                      childAspectRatio = 0.86;
                     }
 
                     return Padding(
-                      padding: const EdgeInsets.all(16.0),
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
                       child: GridView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: crossAxisCount,
                           childAspectRatio: childAspectRatio,
-                          crossAxisSpacing: 16,
-                          mainAxisSpacing: 16,
+                          crossAxisSpacing: 14,
+                          mainAxisSpacing: 14,
                         ),
                         itemCount: filteredProperties.length,
                         itemBuilder: (context, index) {
@@ -263,8 +391,9 @@ class _BrowsePropertiesScreenState extends State<BrowsePropertiesScreen> {
                 );
               },
             ),
-          ),
-        ],
+            const SizedBox(height: 24),
+          ],
+        ),
       ),
     );
   }

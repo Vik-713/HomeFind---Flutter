@@ -179,3 +179,99 @@ lib/
    ```
 
 ---
+
+## 7. Cloud Firestore Security Rules
+
+To ensure strict data privacy and access control, security rules enforce authentication and role isolation:
+
+```javascript
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    match /users/{userId} {
+      allow read: if isAuthenticated();
+      allow create, update: if isOwner(userId);
+      allow delete: if false;
+    }
+
+    match /properties/{propertyId} {
+      allow read: if true;
+      allow create: if isAuthenticated()
+                    && request.resource.data.agentId == request.auth.uid;
+      allow update, delete: if isAuthenticated()
+                            && resource.data.agentId == request.auth.uid;
+    }
+
+    match /viewingSlots/{slotId} {
+      allow read: if true;
+      allow create, update: if true;
+      allow delete: if isAuthenticated();
+    }
+
+    match /bookings/{bookingId} {
+      allow create: if true;
+      allow read: if true;
+      allow update, delete: if isAuthenticated();
+    }
+  }
+}
+```
+
+---
+
+## 8. Atomic Double-Booking Prevention & Cancellation
+
+### Transactional Booking (`runTransaction`)
+When a buyer books a property viewing slot, `BookingService` executes an atomic Firestore transaction:
+1. Reads the target `viewingSlots/{slotId}` document within the transaction.
+2. Asserts that `isAvailable == true`. If already reserved by another user concurrently, the transaction aborts and throws an exception (`Slot already booked`).
+3. Updates `isAvailable` to `false` and creates a new `bookings` document atomically.
+
+### Booking Cancellation & Slot Cleanup
+- Buyers can view their scheduled visits timeline in the **Scheduled Visits** screen.
+- Tapping any scheduled visit card prompts a confirmation dialog and provides a direct trash icon action to cancel the visit.
+- `BookingService.cancelBooking(bookingId, slotId)` atomically deletes the `bookings/{bookingId}` record and sets `isAvailable = true` on `viewingSlots/{slotId}`, freeing up the slot for future bookings.
+
+---
+
+## 9. Navigation & Portal Features
+
+### Buyer Portal Navigation
+1. **Explore & Search (`SearchExploreScreen`)**: Responsive grid with search bar, filter chips, property cards, and instant details navigation.
+2. **Scheduled Visits (`ScheduledTimelineScreen`)**: Timeline view of upcoming viewing appointments with agent details, address, date/time, and one-tap cancellation.
+3. **Saved Listings / Favorites**: Quick access to saved properties.
+4. **Buyer Account (`BuyerAccountScreen`)**: Budget preferences, notification toggles, saved search alerts, and portal switch gateway.
+
+### Agent Portal Navigation
+1. **Property Dashboard (`AgentHomeScreen`)**: Agent-isolated property listing cards displaying photo, location, price, and active slots.
+2. **Scheduled Visits (`AgentScheduledVisitsScreen`)**: Agent-isolated view of upcoming property viewing appointments booked by buyers (includes buyer name, contact email, property photo, date, and time slot).
+3. **Slot Manager (`ManageSlotsScreen`)**: Tool for agents to add, enable, or inspect viewing slots for their specific properties.
+
+---
+
+## 10. Responsive Design System & Layout Safeguards
+
+- **Theme System (`AppTheme`)**: High-contrast, ultra-sleek dark theme with curated hex tokens (`0xFF121212` background, `0xFF181818` card surface, `0xFF2E2E2E` borders).
+- **Dynamic Breakpoints (`GridView`)**:
+  - Smartphone (< 550px): 1 column, aspect ratio `0.86` (prevents bottom button overflow and eliminates blank space).
+  - Tablet / Medium (550px - 899px): 2 columns, aspect ratio `0.80`.
+  - Desktop / Large (>= 900px): 3 or 4 columns, aspect ratio `0.81`.
+- **Seamless Pill Search Inputs**: Decorated with `clipBehavior: Clip.antiAlias`, `filled: false`, and `BorderRadius.circular(30)` to eliminate rectangular background outline artifacts.
+
+---
+
+## 11. Project Verification & Status
+
+- `flutter analyze`: **0 issues / clean analysis pass**.
+- `flutter test`: **All unit and widget tests passing**.
+
