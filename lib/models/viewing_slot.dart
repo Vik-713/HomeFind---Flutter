@@ -54,3 +54,4 @@ class ViewingSlot {
     return '$startTime - $endTime';
   }
 }
+ 

@@ -105,3 +105,4 @@ class Property {
     return '${formatter.format(area)} sq.ft';
   }
 }
+ 

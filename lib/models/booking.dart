@@ -78,3 +78,4 @@ class Booking {
     return DateFormat('EEE, MMM d, yyyy').format(date);
   }
 }
+ 

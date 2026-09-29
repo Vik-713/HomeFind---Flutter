@@ -256,3 +256,4 @@ class _SearchExploreScreenState extends State<SearchExploreScreen> {
     );
   }
 }
+ 

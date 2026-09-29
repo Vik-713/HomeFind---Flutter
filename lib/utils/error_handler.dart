@@ -53,3 +53,4 @@ class ErrorHandler {
     return error?.toString() ?? 'An unexpected error occurred. Please try again.';
   }
 }
+ 

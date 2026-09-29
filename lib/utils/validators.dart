@@ -66,3 +66,4 @@ class Validators {
     return validateMinLength(value, 'Password', 6);
   }
 }
+ 

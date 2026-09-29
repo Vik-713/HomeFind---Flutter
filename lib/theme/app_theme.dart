@@ -224,3 +224,4 @@ class AppTheme {
   // Alias lightTheme to darkTheme to enforce the user's requested Dark Theme UI everywhere
   static ThemeData get lightTheme => darkTheme;
 }
+ 

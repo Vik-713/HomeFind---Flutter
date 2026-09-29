@@ -398,3 +398,4 @@ class _BrowsePropertiesScreenState extends State<BrowsePropertiesScreen> {
     );
   }
 }
+ 

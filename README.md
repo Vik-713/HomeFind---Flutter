@@ -275,3 +275,4 @@ When a buyer books a property viewing slot, `BookingService` executes an atomic 
 - `flutter analyze`: **0 issues / clean analysis pass**.
 - `flutter test`: **All unit and widget tests passing**.
 
+ 
