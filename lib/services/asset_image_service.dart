@@ -11,6 +11,16 @@ class AssetImageService {
     'assets/images/property3.jpg',
     'assets/images/property4.jpg',
     'assets/images/property5.jpg',
+    'assets/images/property6.jpg',
+    'assets/images/property7.jpg',
+    'assets/images/property8.jpg',
+    'assets/images/property9.jpg',
+    'assets/images/property10.jpg',
+    'assets/images/property11.jpg',
+    'assets/images/property12.jpg',
+    'assets/images/property13.jpg',
+    'assets/images/property14.jpg',
+    'assets/images/property15.jpg',
   ];
 
   /// Get default primary asset image path
