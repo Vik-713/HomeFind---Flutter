@@ -17,66 +17,6 @@ class ScheduledTimelineScreen extends StatefulWidget {
 class _ScheduledTimelineScreenState extends State<ScheduledTimelineScreen> {
   final BookingService _bookingService = BookingService();
 
-  Future<void> _confirmDeleteBooking(BuildContext context, Booking booking) async {
-    final confirm = await showDialog<bool>(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        backgroundColor: const Color(0xFF181818),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-          side: const BorderSide(color: Color(0xFF2E2E2E)),
-        ),
-        title: const Row(
-          children: [
-            Icon(Icons.delete_outline, color: Color(0xFFEF4444)),
-            SizedBox(width: 8),
-            Text('Cancel Scheduled Visit?', style: TextStyle(color: AppTheme.textPrimary, fontSize: 18)),
-          ],
-        ),
-        content: Text(
-          'Are you sure you want to cancel and delete your viewing appointment for "${booking.propertyTitle}" on ${booking.formattedDate} (${booking.startTime} - ${booking.endTime})?',
-          style: const TextStyle(color: AppTheme.textSecondary, fontSize: 13, height: 1.4),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(ctx, false),
-            child: const Text('Keep Visit', style: TextStyle(color: AppTheme.textSecondary)),
-          ),
-          FilledButton.icon(
-            style: FilledButton.styleFrom(
-              backgroundColor: const Color(0xFFDC2626),
-              foregroundColor: Colors.white,
-            ),
-            onPressed: () => Navigator.pop(ctx, true),
-            icon: const Icon(Icons.delete_forever, size: 18),
-            label: const Text('Delete Visit'),
-          ),
-        ],
-      ),
-    );
-
-    if (confirm == true && mounted) {
-      try {
-        await _bookingService.cancelBooking(booking.id, booking.slotId);
-        if (!mounted) return;
-        ScaffoldMessenger.of(this.context).showSnackBar(
-          const SnackBar(
-            content: Text('Scheduled viewing visit canceled and deleted successfully.'),
-            backgroundColor: Color(0xFF059669),
-          ),
-        );
-      } catch (e) {
-        if (!mounted) return;
-        ScaffoldMessenger.of(this.context).showSnackBar(
-          SnackBar(
-            content: Text('Failed to delete visit: $e'),
-            backgroundColor: const Color(0xFFDC2626),
-          ),
-        );
-      }
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -123,7 +63,7 @@ class _ScheduledTimelineScreenState extends State<ScheduledTimelineScreen> {
                   Padding(
                     padding: const EdgeInsets.only(left: 4.0, bottom: 12.0),
                     child: Text(
-                      'Your Visit Timelines (Click any visit to delete/cancel)',
+                      'Your Confirmed Visit Timelines',
                       style: Theme.of(context).textTheme.titleLarge?.copyWith(
                             fontWeight: FontWeight.bold,
                             fontSize: 16,
@@ -180,7 +120,7 @@ class _ScheduledTimelineScreenState extends State<ScheduledTimelineScreen> {
         ),
         const SizedBox(width: 14),
 
-        // Timeline Card Content (Click to delete option)
+        // Timeline Card Content
         Expanded(
           child: Container(
             margin: const EdgeInsets.only(bottom: 16),
@@ -190,67 +130,54 @@ class _ScheduledTimelineScreenState extends State<ScheduledTimelineScreen> {
               border: Border.all(color: const Color(0xFF2E2E2E), width: 0.8),
             ),
             clipBehavior: Clip.antiAlias,
-            child: InkWell(
-              onTap: () => _confirmDeleteBooking(context, booking),
-              borderRadius: BorderRadius.circular(20),
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Top Header: Date, Status Badge & Delete Button
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Top Header: Date & Status Badge
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          const Icon(Icons.calendar_month, size: 16, color: AppTheme.textSecondary),
+                          const SizedBox(width: 6),
+                          Text(
+                            booking.formattedDate,
+                            style: const TextStyle(
+                              fontSize: 13,
+                              fontWeight: FontWeight.bold,
+                              color: AppTheme.textPrimary,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF065F46).withValues(alpha: 0.4),
+                          borderRadius: BorderRadius.circular(20),
+                          border: Border.all(color: AppTheme.accentEmerald, width: 0.8),
+                        ),
+                        child: const Row(
+                          mainAxisSize: MainAxisSize.min,
                           children: [
-                            const Icon(Icons.calendar_month, size: 16, color: AppTheme.textSecondary),
-                            const SizedBox(width: 6),
+                            Icon(Icons.check_circle, size: 12, color: AppTheme.accentEmerald),
+                            SizedBox(width: 4),
                             Text(
-                              booking.formattedDate,
-                              style: const TextStyle(
-                                fontSize: 13,
+                              'Confirmed',
+                              style: TextStyle(
+                                color: AppTheme.accentEmerald,
+                                fontSize: 11,
                                 fontWeight: FontWeight.bold,
-                                color: AppTheme.textPrimary,
                               ),
                             ),
                           ],
                         ),
-                        Row(
-                          children: [
-                            Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                              decoration: BoxDecoration(
-                                color: const Color(0xFF065F46).withValues(alpha: 0.4),
-                                borderRadius: BorderRadius.circular(20),
-                                border: Border.all(color: AppTheme.accentEmerald, width: 0.8),
-                              ),
-                              child: const Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Icon(Icons.check_circle, size: 12, color: AppTheme.accentEmerald),
-                                  SizedBox(width: 4),
-                                  Text(
-                                    'Confirmed',
-                                    style: TextStyle(
-                                      color: AppTheme.accentEmerald,
-                                      fontSize: 11,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            const SizedBox(width: 8),
-                            IconButton(
-                              icon: const Icon(Icons.delete_outline, size: 20, color: Color(0xFFEF4444)),
-                              tooltip: 'Cancel & Delete Visit',
-                              onPressed: () => _confirmDeleteBooking(context, booking),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
+                      ),
+                    ],
+                  ),
                     const SizedBox(height: 8),
 
                     // Main Info: Property Photo & Title
@@ -322,10 +249,9 @@ class _ScheduledTimelineScreenState extends State<ScheduledTimelineScreen> {
               ),
             ),
           ),
-        ),
-      ],
-    );
-  }
+        ],
+      );
+    }
 
   Widget _buildVisitImage(String path) {
     if (path.startsWith('http://') || path.startsWith('https://')) {

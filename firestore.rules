@@ -42,8 +42,9 @@ service cloud.firestore {
     // BOOKINGS COLLECTION
     // bookings/{bookingId}
     match /bookings/{bookingId} {
-      // Public buyers and agents can create, read, update, and delete bookings
-      allow read, create, update, delete: if true;
+      // Public buyers and agents can create and read bookings
+      allow read, create, update: if true;
+      allow delete: if false;
     }
   }
 }

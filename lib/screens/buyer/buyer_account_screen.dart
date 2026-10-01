@@ -64,7 +64,7 @@ class _BuyerAccountScreenState extends State<BuyerAccountScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Home Buyer / Viewer',
+                              'Viketh Hegde',
                               style: TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
@@ -73,7 +73,7 @@ class _BuyerAccountScreenState extends State<BuyerAccountScreen> {
                             ),
                             SizedBox(height: 4),
                             Text(
-                              'buyer@homefind.app • Active Searcher',
+                              'viketh@homefind.app • Active Searcher',
                               style: TextStyle(
                                 fontSize: 13,
                                 color: AppTheme.textSecondary,
