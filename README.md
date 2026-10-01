@@ -213,15 +213,11 @@ service cloud.firestore {
     }
 
     match /viewingSlots/{slotId} {
-      allow read: if true;
-      allow create, update: if true;
-      allow delete: if isAuthenticated();
+      allow read, create, update, delete: if true;
     }
 
     match /bookings/{bookingId} {
-      allow create: if true;
-      allow read: if true;
-      allow update, delete: if isAuthenticated();
+      allow read, create, update, delete: if true;
     }
   }
 }

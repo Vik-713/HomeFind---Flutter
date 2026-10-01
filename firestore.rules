@@ -35,25 +35,15 @@ service cloud.firestore {
     // VIEWING SLOTS COLLECTION
     // viewingSlots/{slotId}
     match /viewingSlots/{slotId} {
-      // Public buyers and agents can view viewing slots
-      allow read: if true;
-      
-      // Authenticated users or slot operations can update slot availability
-      allow create, update: if true;
-      allow delete: if isAuthenticated();
+      // Public buyers and agents can view, create, update, and manage viewing slots
+      allow read, create, update, delete: if true;
     }
 
     // BOOKINGS COLLECTION
     // bookings/{bookingId}
     match /bookings/{bookingId} {
-      // Public buyers can create bookings
-      allow create: if true;
-      
-      // Users/agents can read booking records
-      allow read: if true;
-      
-      // Prevent arbitrary modification or deletion of past bookings
-      allow update, delete: if isAuthenticated();
+      // Public buyers and agents can create, read, update, and delete bookings
+      allow read, create, update, delete: if true;
     }
   }
 }
