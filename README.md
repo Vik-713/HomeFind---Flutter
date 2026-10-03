@@ -259,9 +259,9 @@ When a buyer books a property viewing slot, `BookingService` executes an atomic 
 
 - **Theme System (`AppTheme`)**: High-contrast, ultra-sleek dark theme with curated hex tokens (`0xFF121212` background, `0xFF181818` card surface, `0xFF2E2E2E` borders).
 - **Dynamic Breakpoints (`GridView`)**:
-  - Smartphone (< 550px): 1 column, aspect ratio `0.86` (prevents bottom button overflow and eliminates blank space).
-  - Tablet / Medium (550px - 899px): 2 columns, aspect ratio `0.80`.
-  - Desktop / Large (>= 900px): 3 or 4 columns, aspect ratio `0.81`.
+  - Smartphone (< 550px): 1 column, aspect ratio `0.74` (prevents bottom button overflow and eliminates blank space).
+  - Tablet / Medium (550px - 899px): 2 columns, aspect ratio `0.68`.
+  - Desktop / Large (>= 900px): 3 to 4 columns, aspect ratio `0.68`.
 - **Seamless Pill Search Inputs**: Decorated with `clipBehavior: Clip.antiAlias`, `filled: false`, and `BorderRadius.circular(30)` to eliminate rectangular background outline artifacts.
 
 ---
