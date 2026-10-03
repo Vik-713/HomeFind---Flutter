@@ -202,16 +202,16 @@ class _SearchExploreScreenState extends State<SearchExploreScreen> {
 
                     if (constraints.maxWidth >= 1100) {
                       crossAxisCount = 4;
-                      childAspectRatio = 0.81;
+                      childAspectRatio = 0.68;
                     } else if (constraints.maxWidth >= 750) {
                       crossAxisCount = 3;
-                      childAspectRatio = 0.81;
+                      childAspectRatio = 0.68;
                     } else if (constraints.maxWidth >= 550) {
                       crossAxisCount = 2;
-                      childAspectRatio = 0.80;
+                      childAspectRatio = 0.68;
                     } else {
                       crossAxisCount = 1;
-                      childAspectRatio = 0.86;
+                      childAspectRatio = 0.74;
                     }
 
                     return Padding(

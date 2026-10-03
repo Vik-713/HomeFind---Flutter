@@ -336,20 +336,20 @@ class _BrowsePropertiesScreenState extends State<BrowsePropertiesScreen> {
                 return LayoutBuilder(
                   builder: (context, constraints) {
                     int crossAxisCount = 1;
-                    double childAspectRatio = 0.74;
+                    double childAspectRatio = 0.68;
 
                     if (constraints.maxWidth >= 1200) {
                       crossAxisCount = 4;
-                      childAspectRatio = 0.81;
+                      childAspectRatio = 0.68;
                     } else if (constraints.maxWidth >= 900) {
                       crossAxisCount = 3;
-                      childAspectRatio = 0.81;
+                      childAspectRatio = 0.68;
                     } else if (constraints.maxWidth >= 600) {
                       crossAxisCount = 2;
-                      childAspectRatio = 0.80;
+                      childAspectRatio = 0.68;
                     } else {
                       crossAxisCount = 1;
-                      childAspectRatio = 0.86;
+                      childAspectRatio = 0.74;
                     }
 
                     return Padding(

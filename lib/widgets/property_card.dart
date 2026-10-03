@@ -92,7 +92,7 @@ class PropertyCard extends StatelessWidget {
 
             // 2. Card Body Content
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 12.0),
+              padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 10.0),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -108,7 +108,7 @@ class PropertyCard extends StatelessWidget {
                       color: AppTheme.textPrimary,
                     ),
                   ),
-                  const SizedBox(height: 3),
+                  const SizedBox(height: 2),
 
                   // Location
                   Row(
@@ -132,7 +132,7 @@ class PropertyCard extends StatelessWidget {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 8),
+                  const SizedBox(height: 6),
 
                   // Price
                   Row(
@@ -144,7 +144,7 @@ class PropertyCard extends StatelessWidget {
                         style: const TextStyle(
                           color: Color(0xFFE0E0E0),
                           fontWeight: FontWeight.w800,
-                          fontSize: 17,
+                          fontSize: 16,
                         ),
                       ),
                       const SizedBox(width: 4),
@@ -158,56 +158,65 @@ class PropertyCard extends StatelessWidget {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 10),
-                  const Divider(height: 1, color: Color(0xFF262626)),
                   const SizedBox(height: 8),
+                  const Divider(height: 1, color: Color(0xFF262626)),
+                  const SizedBox(height: 6),
 
-                  // Specs (Beds, Baths, Area)
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: [
-                          const Icon(Icons.king_bed_outlined, size: 16, color: AppTheme.textMuted),
-                          const SizedBox(width: 4),
-                          Text(
-                            '${property.bedrooms} Beds',
-                            style: const TextStyle(fontSize: 12, color: AppTheme.textSecondary),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          const Icon(Icons.bathtub_outlined, size: 16, color: AppTheme.textMuted),
-                          const SizedBox(width: 4),
-                          Text(
-                            '${property.bathrooms} Baths',
-                            style: const TextStyle(fontSize: 12, color: AppTheme.textSecondary),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          const Icon(Icons.square_foot, size: 16, color: AppTheme.textMuted),
-                          const SizedBox(width: 4),
-                          Text(
-                            property.formattedArea,
-                            style: const TextStyle(fontSize: 12, color: AppTheme.textSecondary),
-                          ),
-                        ],
-                      ),
-                    ],
+                  // Specs (Beds, Baths, Area) - Wrapped in FittedBox to eliminate right overflow
+                  FittedBox(
+                    fit: BoxFit.scaleDown,
+                    alignment: Alignment.centerLeft,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            const Icon(Icons.king_bed_outlined, size: 15, color: AppTheme.textMuted),
+                            const SizedBox(width: 3),
+                            Text(
+                              '${property.bedrooms} Beds',
+                              style: const TextStyle(fontSize: 11.5, color: AppTheme.textSecondary),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(width: 8),
+                        Row(
+                          children: [
+                            const Icon(Icons.bathtub_outlined, size: 15, color: AppTheme.textMuted),
+                            const SizedBox(width: 3),
+                            Text(
+                              '${property.bathrooms} Baths',
+                              style: const TextStyle(fontSize: 11.5, color: AppTheme.textSecondary),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(width: 8),
+                        Row(
+                          children: [
+                            const Icon(Icons.square_foot, size: 15, color: AppTheme.textMuted),
+                            const SizedBox(width: 3),
+                            Text(
+                              property.formattedArea,
+                              style: const TextStyle(fontSize: 11.5, color: AppTheme.textSecondary),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
 
                   if (showBookButton && onBookViewing != null) ...[
-                    const SizedBox(height: 12),
+                    const SizedBox(height: 8),
                     SizedBox(
                       width: double.infinity,
-                      height: 40,
+                      height: 36,
                       child: FilledButton.icon(
                         onPressed: onBookViewing,
-                        icon: const Icon(Icons.calendar_month, size: 16),
-                        label: const Text('Book Viewing'),
+                        icon: const Icon(Icons.calendar_month, size: 15),
+                        label: const Text(
+                          'Book Viewing',
+                          style: TextStyle(fontSize: 12),
+                        ),
                         style: FilledButton.styleFrom(
                           backgroundColor: const Color(0xFF2A2A2A),
                           foregroundColor: AppTheme.textPrimary,

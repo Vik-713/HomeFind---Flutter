@@ -192,10 +192,13 @@ class _AgentHomeScreenState extends State<AgentHomeScreen> {
         return LayoutBuilder(
           builder: (context, constraints) {
             int crossAxisCount = 1;
+            double childAspectRatio = 0.76;
             if (constraints.maxWidth >= 1100) {
               crossAxisCount = 3;
+              childAspectRatio = 0.72;
             } else if (constraints.maxWidth >= 650) {
               crossAxisCount = 2;
+              childAspectRatio = 0.72;
             }
 
             return Padding(
@@ -234,7 +237,7 @@ class _AgentHomeScreenState extends State<AgentHomeScreen> {
                     child: GridView.builder(
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: crossAxisCount,
-                        childAspectRatio: 0.88,
+                        childAspectRatio: childAspectRatio,
                         crossAxisSpacing: 16,
                         mainAxisSpacing: 16,
                       ),
