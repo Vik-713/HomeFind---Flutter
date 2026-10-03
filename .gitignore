@@ -88,4 +88,4 @@ service-account*.json
 *.keystore
 *.jks
 
-FLUTTER-VIVA-QUESTIONS.txt
+/FLUTTER_VIVA_QUESTIONS.txt

@@ -230,3 +230,128 @@ ANSWER:
 - `TextEditingController`: Manages text content, selection range, and cursor position for input fields (`TextField` / `TextFormField`). Emits notifications when text changes and must be disposed in `dispose()` to prevent memory leaks.
 - `FocusNode`: Manages keyboard focus state for an input widget. Allows programmatic focus requests (`focusNode.requestFocus()`), detecting focus changes, or advancing focus between form fields on keyboard submit.
 
+--------------------------------------------------------------------------------
+QUESTION 31: What are App Bundles / Build Artifacts in Flutter, and how do you compile them?
+--------------------------------------------------------------------------------
+ANSWER:
+- Android: `flutter build appbundle` generates an Android App Bundle (`.aab`) for Google Play Store deployment, or `flutter build apk` for standalone APK binaries.
+- iOS: `flutter build ipa` compiles an iOS App Store submission package (`.ipa`) via Xcode.
+- Web: `flutter build web` compiles Dart code into static HTML, CSS, JavaScript, and WebAssembly (Wasm) inside the `build/web/` output directory.
+
+--------------------------------------------------------------------------------
+QUESTION 32: Where and how do you deploy Flutter applications across Web, Android, and iOS?
+--------------------------------------------------------------------------------
+ANSWER:
+- Web Deployment: The compiled static bundle inside `build/web/` can be deployed to Firebase Hosting (`firebase deploy --only hosting`), Vercel, Netlify, or GitHub Pages.
+- Android Deployment: Upload the `.aab` file to Google Play Console under Production, Closed Beta, or Internal Testing tracks.
+- iOS Deployment: Upload the `.ipa` package to Apple App Store Connect and TestFlight via Xcode or Fastlane.
+
+--------------------------------------------------------------------------------
+QUESTION 33: How do you change application logos / icons in a Flutter project?
+--------------------------------------------------------------------------------
+ANSWER:
+- Automated Approach (Recommended): Use the `flutter_launcher_icons` package. Add your logo image path (e.g., `assets/images/app_logo.png`) to `pubspec.yaml` under `flutter_launcher_icons` configuration, then execute `dart run flutter_launcher_icons`.
+- Native Directory Locations:
+  - Android: Replace icon assets inside `android/app/src/main/res/mipmap-*/ic_launcher.png`.
+  - iOS: Replace image sets inside `ios/Runner/Assets.xcassets/AppIcon.appiconset`.
+  - Web: Update `web/favicon.png` and `web/icons/Icon-192.png` / `Icon-512.png`.
+
+--------------------------------------------------------------------------------
+QUESTION 34: Why did you create so many files in this project instead of putting everything into `main.dart`?
+--------------------------------------------------------------------------------
+ANSWER:
+- Separation of Concerns (SoC): Keeping UI, business logic, data schemas, and styling in dedicated modules prevents monolithic, hard-to-maintain code bloat.
+- Maintainability & Readability: Developers can navigate directly to target files (e.g., `BookingService` or `PropertyCard`) without sifting through thousands of lines of unorganized code.
+- Reusability: Custom UI components (like `PropertyCard` and `EmptyStateWidget`) are reused across multiple screens.
+- Team Collaboration & Testing: Enables concurrent development without git merge conflicts and allows isolated unit/widget testing.
+
+--------------------------------------------------------------------------------
+QUESTION 35: What architectural folder structure is used in HomeFind, and which file belongs to which layer?
+--------------------------------------------------------------------------------
+ANSWER:
+We follow a **Modular Layered Architecture** under the `lib/` directory:
+1. `models/` (`property.dart`, `booking.dart`): Data schemas, JSON serialization, and core business entities.
+2. `services/` (`booking_service.dart`, `property_service.dart`, `auth_service.dart`): Cloud Firestore API operations, transactions, and backend business logic.
+3. `screens/` (`buyer/`, `agent/`, `common/`): Full-screen page layouts grouped by user roles (Buyer vs Agent).
+4. `widgets/` (`property_card.dart`, `empty_state_widget.dart`): Reusable UI sub-components.
+5. `theme/` (`app_theme.dart`): Design tokens, custom dark color palettes, typography, and global theme configurations.
+
+--------------------------------------------------------------------------------
+QUESTION 36: What is the difference between `var`, `final`, `const`, and `late` in Dart?
+--------------------------------------------------------------------------------
+ANSWER:
+- `var`: Type-inferred mutable variable whose assigned value can change during runtime.
+- `final`: Single-assignment variable initialized *at runtime*. Once assigned a value, its reference cannot be reassigned.
+- `const`: Immutable compile-time constant evaluated before app execution. Saves memory by sharing instances.
+- `late`: Instructs Dart that a non-nullable variable will be initialized before it is first accessed (lazy initialization).
+
+--------------------------------------------------------------------------------
+QUESTION 37: What are Extension Methods and Cascade Notation (`..`) in Dart?
+--------------------------------------------------------------------------------
+ANSWER:
+- Cascade Operator (`..`): Allows executing a sequence of operations on the same object without repeating the object reference (e.g., `var paint = Paint()..color = Colors.black..strokeWidth = 2.0;`).
+- Extension Methods: Enables adding custom helper methods to existing classes without modifying their original source code (e.g., `extension StringHelpers on String { String capitalize() => ... }`).
+
+--------------------------------------------------------------------------------
+QUESTION 38: What are Records and Pattern Matching in modern Dart (3.0+)?
+--------------------------------------------------------------------------------
+ANSWER:
+- Records: Anonymous, aggregate types that allow functions to return multiple values cleanly without defining custom data wrapper classes (e.g., `(String, int) getAppDetails() => ('HomeFind', 2026);`).
+- Pattern Matching: Enables destructuring records, lists, and objects inside `switch` expressions or variable assignments (e.g., `var (name, year) = getAppDetails();`).
+
+--------------------------------------------------------------------------------
+QUESTION 39: How do Generics work in Dart, and why are they used?
+--------------------------------------------------------------------------------
+ANSWER:
+- Generics (`<T>`) allow writing reusable, type-safe code that works across different data types while enforcing compile-time type safety.
+- Examples: `List<Property>` guarantees only `Property` instances can be added to the list; `Stream<List<Booking>>` ensures stream listeners receive typed booking snapshots.
+
+--------------------------------------------------------------------------------
+QUESTION 40: What is the role of `pubspec.yaml` and `pubspec.lock` in a Flutter project?
+--------------------------------------------------------------------------------
+ANSWER:
+- `pubspec.yaml`: The project manifest file where project metadata, external package dependencies (e.g., `cloud_firestore`, `firebase_core`), asset paths (`assets/images/`), fonts, and SDK versions are declared.
+- `pubspec.lock`: Locks exact semantic version numbers of all installed direct and transitive package dependencies, guaranteeing reproducible builds across all developer environments and CI/CD pipelines.
+
+--------------------------------------------------------------------------------
+QUESTION 41: What are Widgets in Flutter, and what are the main categories of widgets used in HomeFind?
+--------------------------------------------------------------------------------
+ANSWER:
+In Flutter, "Everything is a Widget." A widget is an immutable blueprint describing a portion of the user interface.
+Main Categories of Widgets Used:
+1. Structural Layout Widgets: `Scaffold`, `AppBar`, `Container`, `Padding`, `SizedBox`.
+2. Flex & Multi-Child Layout Widgets: `Row`, `Column`, `Stack`, `IndexedStack`, `GridView`, `ListView`.
+3. Stateful vs Stateless Widgets: `StatelessWidget` (immutable UI) and `StatefulWidget` (mutable UI with persistent state).
+4. Primitive Content Widgets: `Text`, `Image`, `Icon`, `Divider`.
+5. User Interaction Widgets: `ElevatedButton`, `FilledButton`, `InkWell`, `GestureDetector`, `IconButton`.
+6. Asynchronous Builder Widgets: `StreamBuilder` and `FutureBuilder` (used to listen to real-time streams/futures and render UI reactively).
+
+--------------------------------------------------------------------------------
+QUESTION 42: How is an API or Database response fetched and rendered onto the UI in Flutter?
+--------------------------------------------------------------------------------
+ANSWER:
+The API/Database rendering lifecycle follows 4 core steps:
+1. Asynchronous Trigger: The app invokes an async stream or future (e.g., `_firestore.collection('properties').snapshots()`).
+2. Data Deserialization: Raw JSON or Firestore `DocumentSnapshot` data is converted into strongly typed Dart model instances via factory constructors (`Property.fromFirestore(doc)`).
+3. Reactive State Listening: A `StreamBuilder` or `FutureBuilder` listens for emitted data snapshots (`AsyncSnapshot<T>`).
+4. UI Rendering:
+   - While loading (`snapshot.connectionState == ConnectionState.waiting`): Renders a loading spinner (`CircularProgressIndicator`).
+   - On error (`snapshot.hasError`): Displays a failure message widget (`EmptyStateWidget`).
+   - On success (`snapshot.hasData`): Renders virtualized list/grid builders (`GridView.builder`) using component widgets (`PropertyCard`).
+
+--------------------------------------------------------------------------------
+QUESTION 43: Explain the step-by-step execution flow of what gets called when a user performs an action (e.g., booking a viewing).
+--------------------------------------------------------------------------------
+ANSWER:
+Step-by-Step Execution Call Chain:
+1. User Gesture: User taps the "Book Viewing" button inside `PropertyCard`, triggering its `onPressed` callback.
+2. Screen Navigation: `Navigator.of(context).push()` pushes `ViewingSchedulerScreen` onto the navigation stack.
+3. Form Validation: `_formKey.currentState!.validate()` runs synchronous validator functions on input fields (checking date, time slot, email).
+4. State Controller Extraction: Selected values and text are read from `TextEditingController` instances.
+5. Service Call: Invokes `_bookingService.bookViewing(propertyId, buyerId, date, timeSlot)`.
+6. Cloud Database Query: `_firestore.runTransaction()` executes an atomic read-and-write query in Cloud Firestore to verify availability and lock the slot.
+7. Mounted Lifecycle Guard: `if (!mounted) return;` verifies `BuildContext` is still valid after the async `await`.
+8. UI Feedback & Pop: `ScaffoldMessenger.of(context).showSnackBar()` presents a confirmation toast and `Navigator.of(context).pop()` pops the screen back to the timeline.
+
+
+
